@@ -416,6 +416,8 @@ outcome in a roughly linear way.</p>
 </div>
 <div id="problem-2-a-homicides-in-50-large-u.s.-cities" class="section level1">
 <h1>Problem #2 A Homicides in 50 Large U.S. Cities</h1>
+<div id="data-cleaning" class="section level3">
+<h3><em>Data cleaning</em></h3>
 <p>Import and clean the homicides csv file.</p>
 <pre class="r"><code>hom_df = read_csv(&quot;./data/homicide-data.csv&quot;) %&gt;%
   janitor::clean_names() </code></pre>
@@ -434,7 +436,275 @@ Each row contains information for one case of homicides.</p>
 summary_df = hom_df %&gt;%
   group_by(city_state) %&gt;% 
   summarise(n_hom = n(),
-            n_unsolve = sum(solve_status == &quot;unsolved&quot;))</code></pre>
+            n_unsolve = sum(solve_status == &quot;unsolved&quot;))
+
+knitr::kable(summary_df)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">city_state</th>
+<th align="right">n_hom</th>
+<th align="right">n_unsolve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Albuquerque,NM</td>
+<td align="right">378</td>
+<td align="right">146</td>
+</tr>
+<tr class="even">
+<td align="left">Atlanta,GA</td>
+<td align="right">973</td>
+<td align="right">373</td>
+</tr>
+<tr class="odd">
+<td align="left">Baltimore,MD</td>
+<td align="right">2827</td>
+<td align="right">1825</td>
+</tr>
+<tr class="even">
+<td align="left">Baton Rouge,LA</td>
+<td align="right">424</td>
+<td align="right">196</td>
+</tr>
+<tr class="odd">
+<td align="left">Birmingham,AL</td>
+<td align="right">800</td>
+<td align="right">347</td>
+</tr>
+<tr class="even">
+<td align="left">Boston,MA</td>
+<td align="right">614</td>
+<td align="right">310</td>
+</tr>
+<tr class="odd">
+<td align="left">Buffalo,NY</td>
+<td align="right">521</td>
+<td align="right">319</td>
+</tr>
+<tr class="even">
+<td align="left">Charlotte,NC</td>
+<td align="right">687</td>
+<td align="right">206</td>
+</tr>
+<tr class="odd">
+<td align="left">Chicago,IL</td>
+<td align="right">5535</td>
+<td align="right">4073</td>
+</tr>
+<tr class="even">
+<td align="left">Cincinnati,OH</td>
+<td align="right">694</td>
+<td align="right">309</td>
+</tr>
+<tr class="odd">
+<td align="left">Columbus,OH</td>
+<td align="right">1084</td>
+<td align="right">575</td>
+</tr>
+<tr class="even">
+<td align="left">Dallas,TX</td>
+<td align="right">1567</td>
+<td align="right">754</td>
+</tr>
+<tr class="odd">
+<td align="left">Denver,CO</td>
+<td align="right">312</td>
+<td align="right">169</td>
+</tr>
+<tr class="even">
+<td align="left">Detroit,MI</td>
+<td align="right">2519</td>
+<td align="right">1482</td>
+</tr>
+<tr class="odd">
+<td align="left">Durham,NC</td>
+<td align="right">276</td>
+<td align="right">101</td>
+</tr>
+<tr class="even">
+<td align="left">Fort Worth,TX</td>
+<td align="right">549</td>
+<td align="right">255</td>
+</tr>
+<tr class="odd">
+<td align="left">Fresno,CA</td>
+<td align="right">487</td>
+<td align="right">169</td>
+</tr>
+<tr class="even">
+<td align="left">Houston,TX</td>
+<td align="right">2942</td>
+<td align="right">1493</td>
+</tr>
+<tr class="odd">
+<td align="left">Indianapolis,IN</td>
+<td align="right">1322</td>
+<td align="right">594</td>
+</tr>
+<tr class="even">
+<td align="left">Jacksonville,FL</td>
+<td align="right">1168</td>
+<td align="right">597</td>
+</tr>
+<tr class="odd">
+<td align="left">Kansas City,MO</td>
+<td align="right">1190</td>
+<td align="right">486</td>
+</tr>
+<tr class="even">
+<td align="left">Las Vegas,NV</td>
+<td align="right">1381</td>
+<td align="right">572</td>
+</tr>
+<tr class="odd">
+<td align="left">Long Beach,CA</td>
+<td align="right">378</td>
+<td align="right">156</td>
+</tr>
+<tr class="even">
+<td align="left">Los Angeles,CA</td>
+<td align="right">2257</td>
+<td align="right">1106</td>
+</tr>
+<tr class="odd">
+<td align="left">Louisville,KY</td>
+<td align="right">576</td>
+<td align="right">261</td>
+</tr>
+<tr class="even">
+<td align="left">Memphis,TN</td>
+<td align="right">1514</td>
+<td align="right">483</td>
+</tr>
+<tr class="odd">
+<td align="left">Miami,FL</td>
+<td align="right">744</td>
+<td align="right">450</td>
+</tr>
+<tr class="even">
+<td align="left">Milwaukee,wI</td>
+<td align="right">1115</td>
+<td align="right">403</td>
+</tr>
+<tr class="odd">
+<td align="left">Minneapolis,MN</td>
+<td align="right">366</td>
+<td align="right">187</td>
+</tr>
+<tr class="even">
+<td align="left">Nashville,TN</td>
+<td align="right">767</td>
+<td align="right">278</td>
+</tr>
+<tr class="odd">
+<td align="left">New Orleans,LA</td>
+<td align="right">1434</td>
+<td align="right">930</td>
+</tr>
+<tr class="even">
+<td align="left">New York,NY</td>
+<td align="right">627</td>
+<td align="right">243</td>
+</tr>
+<tr class="odd">
+<td align="left">Oakland,CA</td>
+<td align="right">947</td>
+<td align="right">508</td>
+</tr>
+<tr class="even">
+<td align="left">Oklahoma City,OK</td>
+<td align="right">672</td>
+<td align="right">326</td>
+</tr>
+<tr class="odd">
+<td align="left">Omaha,NE</td>
+<td align="right">409</td>
+<td align="right">169</td>
+</tr>
+<tr class="even">
+<td align="left">Philadelphia,PA</td>
+<td align="right">3037</td>
+<td align="right">1360</td>
+</tr>
+<tr class="odd">
+<td align="left">Phoenix,AZ</td>
+<td align="right">914</td>
+<td align="right">504</td>
+</tr>
+<tr class="even">
+<td align="left">Pittsburgh,PA</td>
+<td align="right">631</td>
+<td align="right">337</td>
+</tr>
+<tr class="odd">
+<td align="left">Richmond,VA</td>
+<td align="right">429</td>
+<td align="right">113</td>
+</tr>
+<tr class="even">
+<td align="left">Sacramento,CA</td>
+<td align="right">376</td>
+<td align="right">139</td>
+</tr>
+<tr class="odd">
+<td align="left">San Antonio,TX</td>
+<td align="right">833</td>
+<td align="right">357</td>
+</tr>
+<tr class="even">
+<td align="left">San Bernardino,CA</td>
+<td align="right">275</td>
+<td align="right">170</td>
+</tr>
+<tr class="odd">
+<td align="left">San Diego,CA</td>
+<td align="right">461</td>
+<td align="right">175</td>
+</tr>
+<tr class="even">
+<td align="left">San Francisco,CA</td>
+<td align="right">663</td>
+<td align="right">336</td>
+</tr>
+<tr class="odd">
+<td align="left">Savannah,GA</td>
+<td align="right">246</td>
+<td align="right">115</td>
+</tr>
+<tr class="even">
+<td align="left">St. Louis,MO</td>
+<td align="right">1677</td>
+<td align="right">905</td>
+</tr>
+<tr class="odd">
+<td align="left">Stockton,CA</td>
+<td align="right">444</td>
+<td align="right">266</td>
+</tr>
+<tr class="even">
+<td align="left">Tampa,FL</td>
+<td align="right">208</td>
+<td align="right">95</td>
+</tr>
+<tr class="odd">
+<td align="left">Tulsa,AL</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Tulsa,OK</td>
+<td align="right">583</td>
+<td align="right">193</td>
+</tr>
+<tr class="odd">
+<td align="left">Washington,DC</td>
+<td align="right">1345</td>
+<td align="right">589</td>
+</tr>
+</tbody>
+</table>
 <p>The code chunck above did:</p>
 <ul>
 <li>created the <code>city_state</code> variable that include the city
@@ -444,6 +714,32 @@ the homicide case is solved or unsolved</li>
 <li>obtained the total number of homicides within each cities</li>
 <li>obtained the number of unsolved homicides within each cities</li>
 </ul>
+</div>
+<div id="estimate-the-proportion-of-unsolved-homicides-in-baltimore-md" class="section level3">
+<h3><em>Estimate the proportion of unsolved homicides in Baltimore,
+MD</em></h3>
+<pre class="r"><code>bal_df = summary_df %&gt;% 
+  filter(city_state == &quot;Baltimore,MD&quot;)
+
+test_output = prop.test(
+  x = pull(bal_df, n_unsolve),
+  n = pull(bal_df, n_hom)) %&gt;% 
+  broom::tidy()
+
+list(
+  proportion = round(test_output$estimate, 3),
+  CI = str_c(round(test_output$conf.low, 3), 
+             round(test_output$conf.high, 3)))</code></pre>
+<pre><code>## $proportion
+##     p 
+## 0.646 
+## 
+## $CI
+## [1] &quot;0.6280.663&quot;</code></pre>
+<p>By using the <code>prop.test</code> function, we estimated the
+proportion of unsolved homicides in the city of Baltimore, MD, is 64.6%
+(95% CI: 62.8%, 0.663%).</p>
+</div>
 </div>
 <div id="problem-3-simulation-explore-power-in-a-one-sample-t-test" class="section level1">
 <h1>Problem #3 Simulation: Explore Power in a One-Sample t-Test</h1>

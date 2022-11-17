@@ -83,6 +83,8 @@ This plot suggests high within-subject correlation -- subjects who start above a
 
 # Problem #2 A Homicides in 50 Large U.S. Cities
 
+### *Data cleaning*
+
 Import and clean the homicides csv file.
 
 ```{r message=FALSE, warning=FALSE}
@@ -106,6 +108,8 @@ summary_df = hom_df %>%
   group_by(city_state) %>% 
   summarise(n_hom = n(),
             n_unsolve = sum(solve_status == "unsolved"))
+
+knitr::kable(summary_df)
 ```
 
 The code chunck above did:
@@ -115,12 +119,24 @@ The code chunck above did:
 * obtained the total number of homicides within each cities
 * obtained the number of unsolved homicides within each cities
 
+### *Estimate the proportion of unsolved homicides in Baltimore, MD*
 
 ```{r message=FALSE, warning=FALSE}
+bal_df = summary_df %>% 
+  filter(city_state == "Baltimore,MD")
 
+test_output = prop.test(
+  x = pull(bal_df, n_unsolve),
+  n = pull(bal_df, n_hom)) %>% 
+  broom::tidy()
+
+list(
+  proportion = round(test_output$estimate, 3),
+  CI = str_c(round(test_output$conf.low, 3), 
+             round(test_output$conf.high, 3)))
 ```
 
-
+By using the `prop.test` function, we estimated the proportion of unsolved homicides in the city of Baltimore, MD, is `r round(test_output$estimate, 3)*100`% (95% CI: `r round(test_output$conf.low, 3)*100`%, `r round(test_output$conf.high, 3)`%).
 
 # Problem #3 Simulation: Explore Power in a One-Sample t-Test
 
