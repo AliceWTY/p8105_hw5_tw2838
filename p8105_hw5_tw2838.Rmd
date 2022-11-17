@@ -79,3 +79,50 @@ tidy_df %>%
 This plot suggests high within-subject correlation -- subjects who start above average end up above average, and those that start below average end up below average. Subjects in the control group generally don't change over time, but those in the experiment group increase their outcome in a roughly linear way.
 
 
+
+
+# Problem #2 A Homicides in 50 Large U.S. Cities
+
+Import and clean the homicides csv file.
+
+```{r message=FALSE, warning=FALSE}
+hom_df = read_csv("./data/homicide-data.csv") %>%
+  janitor::clean_names() 
+```
+
+The raw homicides dataset includes `r nrow(hom_df)` observations and `r ncol(hom_df)` variables, including `r variable.names(hom_df)`. Each row contains information for one case of homicides. 
+
+
+```{r message=FALSE, warning=FALSE}
+hom_df = hom_df %>%
+  mutate(city_state = str_c(city, state, sep = ","),
+         solve_status = case_when(
+           disposition == "Closed without arrest" ~ "unsolved",
+           disposition == "Open/No arrest" ~ "unsolved",
+           disposition == "Closed by arrest" ~ "solved")) %>% 
+  relocate(city_state, solve_status)
+
+summary_df = hom_df %>%
+  group_by(city_state) %>% 
+  summarise(n_hom = n(),
+            n_unsolve = sum(solve_status == "unsolved"))
+```
+
+The code chunck above did:
+
+* created the `city_state` variable that include the city and state information by using `city_state = str_c()`
+* created the `solve_status` variable that indicate whether the homicide case is solved or unsolved
+* obtained the total number of homicides within each cities
+* obtained the number of unsolved homicides within each cities
+
+
+```{r message=FALSE, warning=FALSE}
+
+```
+
+
+
+# Problem #3 Simulation: Explore Power in a One-Sample t-Test
+
+
+
