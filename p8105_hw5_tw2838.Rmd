@@ -2,7 +2,7 @@
 title: "p8105_hw5_tw2838"
 author: "Tianyou Wang"
 date: "2022-11-16"
-output: html_document
+output: github_document
 ---
 
 ## Setting Opotions
@@ -166,5 +166,104 @@ city_test %>%
 
 # Problem #3 Simulation: Explore Power in a One-Sample t-Test
 
+### *Setting the function*
 
+Write down the function:
+
+```{r}
+one_samp_ttest = function(n=30, sigma=5, mu) {
+  
+  ttest_data = tibble(
+    x = rnorm(n, mean = mu, sd = sigma))
+  
+  ttest_data %>% 
+    t.test() %>% 
+    broom::tidy()
+}
+```
+
+Generate 5000 datasets from the model. For each dateset, save the mu_hat and the coresponding p-values.
+
+```{r}
+ttest_output = 
+  expand_grid(
+    true_mu = 0,
+    iter = 1:5000
+  ) %>% 
+  mutate(
+    mu_df = map(true_mu, ~one_samp_ttest(mu=.x))
+  ) %>% 
+  unnest(mu_df) %>% 
+  select(mu_hat = estimate, p_value = p.value)
+```
+
+Repeating the above process for mu = (1, 2, 3, 4, 5, 6).
+```{r}
+repeated_output = 
+  expand_grid(
+    true_mu = c(1, 2, 3, 4, 5, 6),
+    iter = 1:5000
+  ) %>% 
+  mutate(
+    mu_df = map(true_mu, ~one_samp_ttest(mu=.x))
+  ) %>% 
+  unnest(mu_df) %>% 
+  select(true_mu, mu_hat = estimate, p_value = p.value)
+```
+
+### *Plot showing the proportion of times the null was rejected*
+
+```{r}
+plot1_df = repeated_output %>% 
+  mutate(decision = case_when(
+           p_value >= 0.05 ~ "fail to reject",
+           p_value < 0.05 ~ "reject")) %>% 
+  group_by(true_mu) %>% 
+  summarise(n_total = n(),
+            n_rejct = sum(decision == "reject"),
+            proportion = n_rejct/n_total)
+```
+
+```{r}
+plot1_df %>% 
+  ggplot(aes(x = true_mu, y = proportion)) +
+  geom_point() +
+  labs(title = "Proportion of time to be reject under different true mean",
+       x = "true mean",
+       y = "proportion") +
+  scale_x_continuous(
+    breaks = c(1, 2, 3, 4, 5, 6)) +
+  theme(legend.position = "None")
+```
+
+From the graph, we observed that the proportion of time to be reject increase with increased true mean with fixed n=30, and sigma = 5.
+
+
+### *More plots*
+
+```{r}
+plot2_df = repeated_output %>% 
+  group_by(true_mu) %>% 
+  summarise(average = mean(mu_hat))
+```
+
+```{r}
+plot2_df %>% 
+  ggplot(aes(x = true_mu, y = average)) +
+  geom_point() +
+  labs(title = "average estimated mu vs true mu",
+       x = "true mean",
+       y = "average estimated mu") +
+  scale_x_continuous(
+    breaks = c(1, 2, 3, 4, 5, 6)) +
+  theme(legend.position = "None")
+```
+
+```{r}
+plot3_df = repeated_output %>% 
+  mutate(decision = case_when(
+           p_value >= 0.05 ~ "fail to reject",
+           p_value < 0.05 ~ "reject")) 
+  
+```
 
